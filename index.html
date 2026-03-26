@@ -52,6 +52,24 @@
       font-size: 0.95rem;
     }
 
+    .section-label {
+      max-width: 1100px;
+      margin: 52px auto 16px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dl-btn.web {
+      background: #1a1a2e;
+      color: #a78bfa;
+      border: 1px solid #2e2050;
+    }
+
     .grid {
       max-width: 1100px;
       margin: 48px auto 0;
@@ -209,8 +227,14 @@
   <p>Download the latest release for your platform. Builds are automatic on every version tag.</p>
 </header>
 
+<div class="section-label">Desktop Apps</div>
 <div class="grid" id="grid">
   <!-- cards injected by JS -->
+</div>
+
+<div class="section-label">Web Apps</div>
+<div class="grid" id="web-grid">
+  <!-- web app cards injected by JS -->
 </div>
 
 <footer>
@@ -354,7 +378,73 @@ async function render() {
   }));
 }
 
+const WEB_APPS = [
+  {
+    repo: 'waleedrana777/movie_studio',
+    name: 'Movie Studio',
+    icon: '🎬',
+    desc: 'Node-based movie production tool with scene, shot, and asset management.',
+    url: null, // fill in after Vercel deploy
+  },
+  {
+    repo: 'waleedrana777/roadmap_app',
+    name: 'Roadmap App',
+    icon: '🗺',
+    desc: 'Interactive force-graph roadmap visualization with D3 and animations.',
+    url: null,
+  },
+  {
+    repo: 'waleedrana777/app_exhibitioner',
+    name: 'App Exhibitioner',
+    icon: '🖼',
+    desc: 'Curated AI app exhibition with a tilted 45° grid layout.',
+    url: null,
+  },
+  {
+    repo: 'waleedrana777/hair_stylesuggestar',
+    name: 'Hair Style Suggestar',
+    icon: '💇',
+    desc: 'AI-powered hair styling recommendations via OpenAI vision.',
+    url: null,
+  },
+  {
+    repo: 'waleedrana777/military_hive',
+    name: 'Military Hive',
+    icon: '🪖',
+    desc: 'Military network dashboard with war-room, intel, comms, and vault modules.',
+    url: null,
+  },
+];
+
+function buildWebCard(app) {
+  const openBtn = app.url
+    ? `<a class="dl-btn web" href="${app.url}" target="_blank">🌐 Open App</a>`
+    : `<span class="dl-btn web disabled">🌐 Deploy to Vercel</span>`;
+
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div class="app-icon">${app.icon}</div>
+        <div class="app-meta">
+          <div class="app-name">${app.name}</div>
+          <div class="app-version">
+            <a href="https://github.com/${app.repo}" target="_blank" style="color:var(--accent);font-size:0.72rem;text-decoration:none;">github.com/${app.repo}</a>
+          </div>
+        </div>
+      </div>
+      <p class="app-desc">${app.desc}</p>
+      <div class="downloads">${openBtn}</div>
+    </div>
+  `;
+}
+
+function renderWebApps() {
+  const grid = document.getElementById('web-grid');
+  grid.innerHTML = WEB_APPS.map(buildWebCard).join('');
+}
+
 render();
+renderWebApps();
 </script>
 </body>
 </html>
