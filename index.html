@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waleed's Apps</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --accent: #7c6af7;
+      --accent-dim: #3d3480;
+      --text: #e2e2f0;
+      --muted: #6b6b8a;
+      --green: #4ade80;
+      --blue: #60a5fa;
+      --orange: #fb923c;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 0 24px 80px;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 0 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      max-width: 1100px;
+      margin: 48px auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card:hover {
+      border-color: var(--accent-dim);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-dim), #1e1e3a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .app-meta { flex: 1; min-width: 0; }
+
+    .app-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-version {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .version-badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .app-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .downloads {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .dl-btn:hover { opacity: 0.8; }
+
+    .dl-btn.mac   { background: #1e2a1e; color: var(--green); border: 1px solid #2a402a; }
+    .dl-btn.win   { background: #1a2030; color: var(--blue);  border: 1px solid #253050; }
+    .dl-btn.linux { background: #2a2010; color: var(--orange); border: 1px solid #403010; }
+    .dl-btn.apk   { background: #201a30; color: #c084fc; border: 1px solid #302050; }
+
+    .dl-btn.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .loading-dots::after {
+      content: '...';
+      animation: dots 1.2s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0%, 20%  { content: '.'; }
+      40%      { content: '..'; }
+      60%      { content: '...'; }
+      80%,100% { content: ''; }
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+    footer {
+      max-width: 1100px;
+      margin: 64px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 500px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Apps by <span>Waleed</span></h1>
+  <p>Download the latest release for your platform. Builds are automatic on every version tag.</p>
+</header>
+
+<div class="grid" id="grid">
+  <!-- cards injected by JS -->
+</div>
+
+<footer>
+  <p>Releases powered by <a href="https://github.com/waleedrana777" target="_blank">GitHub</a>. Source available per-repo.</p>
+</footer>
+
+<script>
+const APPS = [
+  {
+    repo: 'waleedrana777/cash_app',
+    name: 'Cash App',
+    icon: '💸',
+    desc: 'Cash manifestation and financial visualization desktop app.',
+    platforms: ['mac', 'win', 'linux'],
+  },
+  {
+    repo: 'waleedrana777/same_state_of_power',
+    name: 'Same State of Power',
+    icon: '⚡',
+    desc: 'Mental state and focus tracking desktop app.',
+    platforms: ['mac', 'win', 'linux'],
+  },
+  {
+    repo: 'waleedrana777/time_trillion_tracker',
+    name: 'Time Trillion Tracker',
+    icon: '⏱',
+    desc: 'Explosive actions time tracking and productivity tool.',
+    platforms: ['mac', 'win', 'linux'],
+  },
+  {
+    repo: 'waleedrana777/yt_transcrib',
+    name: 'YT Transcrib',
+    icon: '🎙',
+    desc: 'YouTube transcription and subtitle extraction tool.',
+    platforms: ['mac', 'win', 'linux'],
+  },
+  {
+    repo: 'waleedrana777/conquer_web_language_status',
+    name: 'Conquer Language Status',
+    icon: '🌍',
+    desc: 'Language learning status tracker with Italian vocabulary.',
+    platforms: ['mac', 'win', 'linux', 'apk'],
+  },
+  {
+    repo: 'waleedrana777/gemini_mac_client',
+    name: 'Gemini Mac Client',
+    icon: '✨',
+    desc: 'Native macOS client for Google Gemini AI.',
+    platforms: ['mac'],
+  },
+];
+
+const PLATFORM_CONFIG = {
+  mac:   { label: '🍎 macOS',   cls: 'mac',   patterns: [/\.dmg$/i, /darwin.*\.zip$/i, /macos.*\.zip$/i] },
+  win:   { label: '🪟 Windows', cls: 'win',   patterns: [/\.exe$/i, /\.msi$/i] },
+  linux: { label: '🐧 Linux',   cls: 'linux', patterns: [/\.AppImage$/i, /\.deb$/i, /\.rpm$/i] },
+  apk:   { label: '🤖 Android', cls: 'apk',   patterns: [/\.apk$/i] },
+};
+
+async function fetchLatestRelease(repo) {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+function findAsset(assets, patterns) {
+  if (!assets) return null;
+  for (const asset of assets) {
+    for (const pat of patterns) {
+      if (pat.test(asset.name)) return asset.browser_download_url;
+    }
+  }
+  return null;
+}
+
+function buildCard(app, release) {
+  const version = release ? release.tag_name : null;
+  const assets = release ? release.assets : [];
+  const hasRelease = !!release;
+
+  const buttons = app.platforms.map(p => {
+    const cfg = PLATFORM_CONFIG[p];
+    const url = findAsset(assets, cfg.patterns);
+    if (url) {
+      return `<a class="dl-btn ${cfg.cls}" href="${url}">${cfg.label}</a>`;
+    }
+    return `<span class="dl-btn ${cfg.cls} disabled">${cfg.label}</span>`;
+  }).join('');
+
+  const versionHtml = version
+    ? `<span class="version-badge">${version}</span>`
+    : `<span style="color:var(--muted);font-size:0.72rem;">no release yet</span>`;
+
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div class="app-icon">${app.icon}</div>
+        <div class="app-meta">
+          <div class="app-name">${app.name}</div>
+          <div class="app-version">${versionHtml}</div>
+        </div>
+      </div>
+      <p class="app-desc">${app.desc}</p>
+      <div class="downloads">${buttons}</div>
+      <div class="status-row">
+        <div class="dot ${hasRelease ? 'live' : ''}"></div>
+        <span>${hasRelease ? 'Live · ' + new Date(release.published_at).toLocaleDateString() : 'No releases published yet'}</span>
+      </div>
+    </div>
+  `;
+}
+
+function buildSkeleton(app) {
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div class="app-icon">${app.icon}</div>
+        <div class="app-meta">
+          <div class="app-name">${app.name}</div>
+          <div class="app-version" style="color:var(--muted);font-size:0.8rem;"><span class="loading-dots">Loading</span></div>
+        </div>
+      </div>
+      <p class="app-desc">${app.desc}</p>
+      <div class="downloads" style="opacity:0.3">
+        ${app.platforms.map(p => `<span class="dl-btn ${PLATFORM_CONFIG[p].cls} disabled">${PLATFORM_CONFIG[p].label}</span>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+async function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = APPS.map(buildSkeleton).join('');
+
+  await Promise.all(APPS.map(async (app, i) => {
+    const release = await fetchLatestRelease(app.repo);
+    const cards = grid.querySelectorAll('.card');
+    cards[i].outerHTML = buildCard(app, release);
+  }));
+}
+
+render();
+</script>
+</body>
+</html>
